@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quickdo_terminal", "quickdo_terminal\quickdo_terminal.csproj", "{92DB6E48-97DB-471C-BB42-27BB59AA015F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92DB6E48-97DB-471C-BB42-27BB59AA015F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92DB6E48-97DB-471C-BB42-27BB59AA015F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92DB6E48-97DB-471C-BB42-27BB59AA015F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92DB6E48-97DB-471C-BB42-27BB59AA015F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {589CD47C-D502-4B31-A174-01A275C52275}
+	EndGlobalSection
+EndGlobal

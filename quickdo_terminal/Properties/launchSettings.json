@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "quickdo_terminal": {
+      "commandName": "Project",
+      "commandLineArgs": "!2"
+    }
+  }
+}
