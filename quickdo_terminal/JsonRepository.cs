@@ -11,7 +11,7 @@ namespace quickdo_terminal
     {
         private JsonSerializerOptions options = new();
         private readonly string directory;
-        private readonly string currentDocumentName = string.Concat(DateTime.UtcNow.Date.ToString("yyyyMMdd"), ".json");
+        private readonly string currentDocumentName = string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json");
         private readonly string currentDocumentPath;
 
         public JsonRepository()
@@ -22,7 +22,6 @@ namespace quickdo_terminal
             options.PropertyNamingPolicy = null;
 
             directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "qdo", "documents");
-            currentDocumentName =
             currentDocumentPath = Path.Combine(directory, currentDocumentName);
 
             if (!Directory.Exists(directory))
