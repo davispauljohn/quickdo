@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using quickdo_terminal.Types;
 
-namespace quickdo_terminal
+namespace quickdo_terminal.Interfaces
 {
     internal interface IDocumentRepository
     {

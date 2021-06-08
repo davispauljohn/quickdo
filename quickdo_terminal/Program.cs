@@ -1,4 +1,6 @@
-﻿using System;
+﻿using quickdo_terminal.Interfaces;
+using quickdo_terminal.Types;
+using System;
 using System.Linq;
 
 namespace quickdo_terminal
@@ -7,11 +9,12 @@ namespace quickdo_terminal
     {
         public static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             string command = args[0];
             char primary = command[0];
             string argument = command.Substring(1);
             string[] options = args.Skip(1).ToArray();
-            DocumentService service = new DocumentService();
+            IDocumentService service = new DocumentService();
 
             switch (primary)
             {
@@ -23,7 +26,6 @@ namespace quickdo_terminal
                         Console.WriteLine($"{task.Rank}\t{task.Status}\t{task.Description}");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
-                        
                     break;
 
                 case '!':
@@ -33,14 +35,30 @@ namespace quickdo_terminal
                         else
                             throw new ArgumentException("Only int arguments are accepted when focusing a task  (![rank:int])");
                     else
-                        Console.WriteLine("Focussed Task (Query)");
+                    {
+                        var focussedTask = service.Query(rank: 1, status: QuickDoStatus.TODO);
+                        foreach (var task in focussedTask)
+                        {
+                            Console.ForegroundColor = task.Colour;
+                            Console.WriteLine($"{task.Rank}\t{task.Status}\t{task.Description}");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
                     break;
 
                 case '+':
                     if (!string.IsNullOrEmpty(argument) && !string.IsNullOrEmpty(argument))
                         service.AddTask(argument);
                     else
-                        Console.WriteLine($"Last Added Task (Query)");
+                    {
+                        var focussedTask = service.Query(top: 1, status: QuickDoStatus.TODO, isDescending: true);
+                        foreach (var task in focussedTask)
+                        {
+                            Console.ForegroundColor = task.Colour;
+                            Console.WriteLine($"{task.Rank}\t{task.Status}\t{task.Description}");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
                     break;
 
                 case 'x':
@@ -50,7 +68,15 @@ namespace quickdo_terminal
                         else
                             throw new ArgumentException("Only int arguments are accepted when completing a task  (x[rank:int])");
                     else
-                        Console.WriteLine("Last Completed Task (Query)");
+                    {
+                        var focussedTask = service.Query(top: 1, status: QuickDoStatus.DONE, isDescending: true);
+                        foreach (var task in focussedTask)
+                        {
+                            Console.ForegroundColor = task.Colour;
+                            Console.WriteLine($"{task.Rank}\t{task.Status}\t{task.Description}");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
                     break;
 
                 case '-':
@@ -60,7 +86,15 @@ namespace quickdo_terminal
                         else
                             throw new ArgumentException("Only int arguments are accepted when cancelling a task (-[rank:int])");
                     else
-                        Console.WriteLine("Cancel Task (Query)");
+                    {
+                        var focussedTask = service.Query(top: 1, status: QuickDoStatus.NOPE, isDescending: true);
+                        foreach (var task in focussedTask)
+                        {
+                            Console.ForegroundColor = task.Colour;
+                            Console.WriteLine($"{task.Rank}\t{task.Status}\t{task.Description}");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
                     break;
             }
         }

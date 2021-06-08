@@ -1,5 +1,7 @@
 ﻿using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
+using quickdo_terminal.Interfaces;
+using quickdo_terminal.Types;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -17,9 +19,8 @@ namespace quickdo_terminal
         public JsonRepository()
         {
             options.Converters.Add(new JsonStringEnumConverter());
-            options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb); 
-            options.ReferenceHandler = ReferenceHandler.Preserve;
-            options.PropertyNamingPolicy = null;
+            options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 
             directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "qdo", "documents");
             currentDocumentPath = Path.Combine(directory, currentDocumentName);
@@ -33,8 +34,7 @@ namespace quickdo_terminal
 
         public Document GetCurrentDocument()
         {
-            var content = File.ReadAllText(currentDocumentPath);
-            return JsonSerializer.Deserialize<Document>(content, options);
+            return JsonSerializer.Deserialize<Document>(File.ReadAllText(currentDocumentPath), options);
         }
 
         public void UpdateDocument(Document document)

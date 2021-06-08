@@ -1,8 +1,8 @@
-﻿namespace quickdo_terminal
+﻿namespace quickdo_terminal.Types
 {
     public enum QuickDoStatus
     {
-        DO,
+        TODO,
         DONE,
         NOPE
     }

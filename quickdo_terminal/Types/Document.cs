@@ -5,23 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace quickdo_terminal
+namespace quickdo_terminal.Types
 {
     public class Document
     {
         public List<Task> Tasks { get; set; } = new();
         public List<LogEntry> Log { get; set; } = new();
-        public Instant Datestamp { get; private set; }
+        public LocalDateTime Datestamp { get; private set; } = DateTimeOffset.Now.Date.ToLocalDateTime();
 
         [JsonConstructor]
         public Document() { }
 
         public static Document Create()
         {
-            var document = new Document
-            {
-                Datestamp = DateTimeOffset.UtcNow.ToInstant()
-            };
+            var document = new Document();
             document.AddLog(LogEntry.DocumentCreated());
 
             return document;
@@ -35,8 +32,10 @@ namespace quickdo_terminal
         public void AddTask(string description)
         {
             var tempRank = Tasks.Count + 1;
-            var targetRank = Tasks.Any(task => task.Status == QuickDoStatus.DO) ? Tasks.Where(task => task.Status == QuickDoStatus.DO).Max(task => task.Rank) + 1 : 1;
+            var incompleteTasks = Tasks.Where(task => task.Status == QuickDoStatus.TODO);
+            var targetRank = incompleteTasks.Any() ? incompleteTasks.Max(task => task.Rank) + 1 : 1;
             var task = Task.Create(description, tempRank);
+
             Tasks.Add(task);
             MarshalTasks(tempRank, targetRank);
 
@@ -49,6 +48,7 @@ namespace quickdo_terminal
         internal void CompleteTask(int rank)
         {
             var task = Tasks.SingleOrDefault(task => task.Rank == rank);
+
             task.Status = QuickDoStatus.DONE;
             MarshalTasks(rank);
 
@@ -72,8 +72,8 @@ namespace quickdo_terminal
         private void MarshalTasks(int oldRank, int? newRank = null)
         {
             int rank = newRank ?? Tasks.Count;
-            if (oldRank == rank)
-                return;
+
+            if (oldRank == rank) return;
 
             bool isPromotion = oldRank > rank;
             Task target = Tasks.Single(task => task.Rank == oldRank);
@@ -85,13 +85,13 @@ namespace quickdo_terminal
                     task.Rank += 1;
                     Log.Add(LogEntry.RankChanged(task));
                 }
-                
+
                 if (!isPromotion && task.Rank > oldRank && task.Rank <= rank)
                 {
                     task.Rank -= 1;
                     Log.Add(LogEntry.RankChanged(task));
                 }
-                
+
                 if (task.Id == target.Id)
                 {
                     task.Rank = rank;

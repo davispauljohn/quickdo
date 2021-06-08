@@ -1,8 +1,9 @@
-﻿using System;
+﻿using quickdo_terminal.Types;
+using System;
 
-namespace quickdo_terminal
+namespace quickdo_terminal.Models
 {
-    internal class TaskModel
+    public class TaskModel
     {
         public int Rank { get; set; }
         public string Status { get; set; }

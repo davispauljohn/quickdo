@@ -1,44 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using quickdo_terminal.Interfaces;
+using quickdo_terminal.Models;
+using quickdo_terminal.Types;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace quickdo_terminal
 {
-    internal class DocumentService
+    public class DocumentService : IDocumentService
     {
         private readonly IDocumentRepository repository = new JsonRepository();
 
-        internal void AddTask(string description)
+        public List<TaskModel> Query(int? top = null, int? rank = null, QuickDoStatus? status = null, bool isDescending = false)
+        {
+            Document document = repository.GetCurrentDocument();
+            IEnumerable<Task> tasks = document.Tasks;
+
+            tasks = isDescending ? tasks.OrderByDescending(t => t.Rank) : tasks.OrderBy(t => t.Rank);
+            tasks = rank == null ? tasks : tasks.Where(t => t.Rank == rank.Value).ToList();
+            tasks = status == null ? tasks : tasks.Where(t => t.Status == status.Value).ToList();
+            tasks = top == null ? tasks : tasks.Take(top.Value).ToList();
+
+            return tasks.Select(task => TaskModel.FromTask(task)).ToList();
+        }
+
+        public void AddTask(string description)
         {
             Document document = repository.GetCurrentDocument();
             document.AddTask(description);
             repository.UpdateDocument(document);
         }
 
-        internal void FocusTask(int rank)
+        public void FocusTask(int rank)
         {
             Document document = repository.GetCurrentDocument();
             document.FocusTask(rank);
             repository.UpdateDocument(document);
         }
 
-        internal List<TaskModel> Query()
-        {
-            Document document = repository.GetCurrentDocument();
-            return document.Tasks
-                .OrderBy(task => task.Rank)
-                .ThenBy(task => task.Status)
-                .Select(task => TaskModel.FromTask(task))
-                .ToList();
-        }
-
-        internal void CompleteTask(int rank)
+        public void CompleteTask(int rank)
         {
             Document document = repository.GetCurrentDocument();
             document.CompleteTask(rank);
             repository.UpdateDocument(document);
         }
 
-        internal void CancelTask(int rank)
+        public void CancelTask(int rank)
         {
             Document document = repository.GetCurrentDocument();
             document.CancelTask(rank);

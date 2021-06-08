@@ -2,11 +2,11 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace quickdo_terminal
+namespace quickdo_terminal.Types
 {
     public class LogEntry
     {
-        public Instant Timestamp { get; set; }
+        public ZonedDateTime Timestamp { get; set; }
         public QuickDoLogType Type { get; set; }
         public Guid TaskId { get; set; }
         public string Value { get; set; }
@@ -18,8 +18,8 @@ namespace quickdo_terminal
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.QueryExecuted,
-                Timestamp = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+                Type = QuickDoLogType.QUERYEXECUTED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = default,
                 Value = query
             };
@@ -29,8 +29,8 @@ namespace quickdo_terminal
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.DocumentCreated,
-                Timestamp = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+                Type = QuickDoLogType.DOCUMENTCREATED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = default,
                 Value = string.Empty
             };
@@ -40,8 +40,8 @@ namespace quickdo_terminal
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.TaskCreated,
-                Timestamp = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+                Type = QuickDoLogType.TASKCREATED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = task.Id,
                 Value = string.Empty
             };
@@ -51,8 +51,8 @@ namespace quickdo_terminal
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.DescriptionChanged,
-                Timestamp = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+                Type = QuickDoLogType.DESCRIPTIONCHANGED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = task.Id,
                 Value = task.Description
             };
@@ -62,8 +62,8 @@ namespace quickdo_terminal
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.StatusChanged,
-                Timestamp = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+                Type = QuickDoLogType.STATUSCHANGED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = task.Id,
                 Value = Enum.GetName(task.Status)
             };
@@ -73,8 +73,8 @@ namespace quickdo_terminal
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.RankChanged,
-                Timestamp = Instant.FromDateTimeOffset(DateTimeOffset.Now),
+                Type = QuickDoLogType.RANKCHANGED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = task.Id,
                 Value = task.Rank.ToString()
             };

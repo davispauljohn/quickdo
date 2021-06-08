@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace quickdo_terminal
+namespace quickdo_terminal.Types
 {
     public class Task
     {
@@ -18,7 +18,7 @@ namespace quickdo_terminal
             return new Task
             {
                 Id = Guid.NewGuid(),
-                Status = QuickDoStatus.DO,
+                Status = QuickDoStatus.TODO,
                 Rank = rank,
                 Description = description
             };
