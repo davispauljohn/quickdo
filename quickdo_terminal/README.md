@@ -2,15 +2,70 @@
 
 A simple task list and activity log for your terminal. 
 
+**Documents** are JSON files for storing Tasks and Logs. One Document is created automatically for each day of use.
+```
+//Document
+{
+    "tasks": [],
+    "log": [],
+    "datestamp": "2021-06-09"
+}
+```
+
+**Tasks** are text descriptions in an ordered list with a gloablly unique **Id**, **Rank** and **Status**  
+```
+//Task
+{
+    "id": "c45ffac9-eb0b-4b95-8f41-9ce98c19b1f7",
+    "status": "TODO",
+    "rank": 1,
+    "description": "Lisa needs braces"
+}
+```
+
+One or more **Log** entries are added per command, containing a **Type** and **Timestamp**. Log entries can also be added manually
+```
+//Log
+{
+    "timestamp": "2021-06-09T22:50:34.7529712\u002B10 UTC\u002B10",
+    "type": "TASKCREATED",
+    "taskId": "c45ffac9-eb0b-4b95-8f41-9ce98c19b1f7",
+    "value": ""
+}
+```
+
 ## Commands
 Command                                       |Syntax                             |Options    
 ----                                          |----                               |----
 Display and filter tasks                      |?                                  |`default` - Display task list
 Display task created most recently            |+                                  |`? -d0 -s1 -t1 -d` 
 Create task with status TODO                  |+[__description__:_string_]        |
-Display task at rank 1                        |!                                  |`? -d0 -r1`  
-Move task to rank 1                           |![__rank__:_int_]                  |
 Display task most recently set to DONE        |x                                  |`? -d0 -s2 -t1 -d`  
 Set the specified task status to DONE         |x[__rank__:_int_]                  |
 Display task most recently set to NOPE        |-                                  |`? -d0 -s3 -t1 -d` 
-Set the specified task to NOPE                |-[__rank__:_int_]                  |     
+Set the specified task to NOPE                |-[__rank__:_int_]                  |   
+Display task at rank 1                        |!                                  |`? -d0 -r1`  
+Move task to rank 1                           |![__rank__:_int_]                  |  
+
+## Statuses
+**TODO** - The default **Status** of a **Task** representing pending work
+
+**DONE** - Positive conclusion
+
+**PUSH** - Deferred and migrated to the next **Document** when it is created
+
+**NOPE** - Negative conclusion
+
+## Log Types
+**DOCUMENTCREATED** - The default **Status** of a **Task** representing pending work
+
+**TASKCREATED** - Positive conclusion
+
+**QUERYEXECUTED** - Deferred and migrated to the next **Document** when it is created
+
+**DESCRIPTIONCHANGED** - Negative conclusion
+
+**STATUSCHANGED** - Negative conclusion
+
+**RANKCHANGED** - Negative conclusion
+

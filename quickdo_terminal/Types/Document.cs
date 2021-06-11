@@ -11,7 +11,7 @@ namespace quickdo_terminal.Types
     {
         public List<Task> Tasks { get; set; } = new();
         public List<LogEntry> Log { get; set; } = new();
-        public LocalDateTime Datestamp { get; private set; } = DateTimeOffset.Now.Date.ToLocalDateTime();
+        public LocalDate Datestamp { get; private set; } = LocalDate.FromDateTime(DateTime.Now);
 
         [JsonConstructor]
         public Document() { }
