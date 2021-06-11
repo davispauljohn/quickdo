@@ -21,6 +21,7 @@ namespace quickdo_terminal
             options.Converters.Add(new JsonStringEnumConverter());
             options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
             options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.WriteIndented = true;
 
             directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "qdo", "documents");
             currentDocumentPath = Path.Combine(directory, currentDocumentName);
