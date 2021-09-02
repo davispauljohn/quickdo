@@ -57,15 +57,15 @@ Move task to rank 1                           |![__rank__:_int_]                
 **NOPE** - Negative conclusion
 
 ## Log Types
-**DOCUMENTCREATED** - The default **Status** of a **Task** representing pending work
+**DOCUMENTCREATED** - Added during the creation of the document. The first entry in all documents.
 
-**TASKCREATED** - Positive conclusion
+**QUERYEXECUTED** - Added when tasks are fetched from storage
 
-**QUERYEXECUTED** - Deferred and migrated to the next **Document** when it is created
+**TASKCREATED** - Added when tasks are created
 
-**DESCRIPTIONCHANGED** - Negative conclusion
+**DESCRIPTIONCHANGED** - Added when a task's description is updated
 
-**STATUSCHANGED** - Negative conclusion
+**STATUSCHANGED** - Added when a task's status is updated
 
-**RANKCHANGED** - Negative conclusion
+**RANKCHANGED** - Added when a task's rank is updated
 
