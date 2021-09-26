@@ -10,6 +10,8 @@ namespace quickdo_terminal.Types
         public QuickDoStatus Status { get; set; }
         public int Rank { get; set; }
         public string Description { get; set; }
+        
+        [JsonIgnore]
         public List<LogEntry> Log { get; set; } = new();
 
         [JsonConstructor]
