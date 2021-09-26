@@ -8,7 +8,7 @@ namespace quickdo_terminal.Types
     {
         public ZonedDateTime Timestamp { get; set; }
         public QuickDoLogType Type { get; set; }
-        public Guid TaskId { get; set; }
+        public Guid? TaskId { get; set; }
         public string Value { get; set; }
 
         [JsonConstructor]

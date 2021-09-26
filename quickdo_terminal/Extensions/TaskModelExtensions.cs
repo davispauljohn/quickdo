@@ -1,19 +1,25 @@
 ﻿using quickdo_terminal.Models;
+using quickdo_terminal.Types;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace quickdo_terminal.Extensions
 {
     public static class TaskModelExtensions
     {
-        public static void ToConsole(this List<TaskModel> tasks)
+        public static ConsoleLine ToConsole(this TaskModel task)
         {
-            foreach (var task in tasks)
-            {
-                Console.ForegroundColor = task.Colour;
-                Console.WriteLine($"{task.Rank}\t{task.Status}\t{task.Description}");
-                Console.ForegroundColor = ConsoleColor.White;
-            }
+            return new ConsoleLine($"{task.Rank}\t{task.Status}\t{task.Description}", task.Colour);
         }
+
+        public static List<ConsoleLine> ToConsole(this List<TaskModel> tasks)
+        {
+            if (tasks == null || tasks.Count == 0)
+                return new List<ConsoleLine>();
+
+            return tasks.Select(t => t.ToConsole()).ToList();
+        }
+
     }
 }

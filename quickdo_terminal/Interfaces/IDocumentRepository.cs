@@ -2,7 +2,7 @@
 
 namespace quickdo_terminal.Interfaces
 {
-    internal interface IDocumentRepository
+    public interface IDocumentRepository
     {
         Document GetCurrentDocument();
 

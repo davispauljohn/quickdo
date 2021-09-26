@@ -10,6 +10,7 @@ namespace quickdo_terminal.Interfaces
         void CancelTask(int rank);
         void CompleteTask(int rank);
         void FocusTask(int rank);
-        List<TaskModel> Query(int? top = null, int? rank = null, QuickDoStatus? status = null, bool isDescending = false);
+        List<TaskModel> Query(int? rank = null);
+        TaskModel QueryMostRecent(QuickDoStatus? status = null);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using quickdo_terminal.Interfaces;
 using quickdo_terminal.Models;
 using quickdo_terminal.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,20 +9,13 @@ namespace quickdo_terminal
 {
     public class DocumentService : IDocumentService
     {
-        private readonly IDocumentRepository repository = new JsonRepository();
+        private readonly IDocumentRepository repository;
 
-        public List<TaskModel> Query(int? top = null, int? rank = null, QuickDoStatus? status = null, bool isDescending = false)
+        public DocumentService(IDocumentRepository repository)
         {
-            Document document = repository.GetCurrentDocument();
-            IEnumerable<Task> tasks = document.Tasks;
-
-            tasks = isDescending ? tasks.OrderByDescending(t => t.Rank) : tasks.OrderBy(t => t.Rank);
-            tasks = rank == null ? tasks : tasks.Where(t => t.Rank == rank.Value).ToList();
-            tasks = status == null ? tasks : tasks.Where(t => t.Status == status.Value).ToList();
-            tasks = top == null ? tasks : tasks.Take(top.Value).ToList();
-
-            return tasks.Select(task => TaskModel.FromTask(task)).ToList();
+            this.repository = repository;
         }
+
 
         public void AddTask(string description)
         {
@@ -49,6 +43,36 @@ namespace quickdo_terminal
             Document document = repository.GetCurrentDocument();
             document.CancelTask(rank);
             repository.UpdateDocument(document);
+        }
+
+        public List<TaskModel> Query(int? rank = null)
+        {
+            Document document = repository.GetCurrentDocument();
+            IEnumerable<Task> tasks = document.Tasks;
+
+            tasks = rank == null ? tasks : tasks.Where(t => t.Rank == rank.Value).ToList();
+
+            return tasks.Select(task => TaskModel.FromTask(task)).ToList();
+        }
+
+        public TaskModel QueryMostRecent(QuickDoStatus? status = null)
+        {
+            Document document = repository.GetCurrentDocument();
+            IEnumerable<Task> tasks = document.Tasks;
+            if (tasks == null)
+                return null;
+
+            var logs = tasks.SelectMany(t => t.Log);
+            var taskId = logs.Aggregate((max, curr) =>
+                max.Timestamp.ToInstant() < curr.Timestamp.ToInstant()
+                && tasks.SingleOrDefault(t => t.Id == curr.TaskId)?.Status == status
+                && curr.Type == QuickDoLogType.STATUSCHANGED ? curr : max).TaskId;
+            var task = tasks?.SingleOrDefault(t => t.Id == taskId);
+
+            if (task != null)
+                return TaskModel.FromTask(task);
+
+            return null;
         }
     }
 }

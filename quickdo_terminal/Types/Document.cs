@@ -1,5 +1,4 @@
 ﻿using NodaTime;
-using NodaTime.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,9 +39,6 @@ namespace quickdo_terminal.Types
             MarshalTasks(tempRank, targetRank);
 
             Log.Add(LogEntry.TaskCreated(task));
-            Log.Add(LogEntry.DescriptionChanged(task));
-            Log.Add(LogEntry.StatusChanged(task));
-            Log.Add(LogEntry.RankChanged(task));
         }
 
         internal void CompleteTask(int rank)

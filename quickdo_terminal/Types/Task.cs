@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace quickdo_terminal.Types
@@ -9,6 +10,7 @@ namespace quickdo_terminal.Types
         public QuickDoStatus Status { get; set; }
         public int Rank { get; set; }
         public string Description { get; set; }
+        public List<LogEntry> Log { get; set; } = new();
 
         [JsonConstructor]
         public Task() { }

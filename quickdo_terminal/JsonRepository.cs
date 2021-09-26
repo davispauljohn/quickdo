@@ -4,6 +4,7 @@ using quickdo_terminal.Interfaces;
 using quickdo_terminal.Types;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -35,7 +36,14 @@ namespace quickdo_terminal
 
         public Document GetCurrentDocument()
         {
-            return JsonSerializer.Deserialize<Document>(File.ReadAllText(currentDocumentPath), options);
+            var document = JsonSerializer.Deserialize<Document>(File.ReadAllText(currentDocumentPath), options);
+            
+            foreach(var task in document.Tasks)
+            {
+                task.Log = document.Log.Where(log => log.TaskId == task.Id).ToList();
+            }
+
+            return document;
         }
 
         public void UpdateDocument(Document document)
