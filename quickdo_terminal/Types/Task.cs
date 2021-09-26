@@ -17,13 +17,13 @@ namespace quickdo_terminal.Types
         [JsonConstructor]
         public Task() { }
 
-        public static Task Create(string description, int rank)
+        public static Task Create(string description)
         {
             return new Task
             {
                 Id = Guid.NewGuid(),
                 Status = QuickDoStatus.TODO,
-                Rank = rank,
+                Rank = 0,
                 Description = description
             };
         }

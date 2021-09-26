@@ -14,8 +14,8 @@ namespace quickdo_terminal
     {
         private JsonSerializerOptions options = new();
         private readonly string directory;
-        private readonly string currentDocumentName = string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json");
-        private readonly string currentDocumentPath;
+        private string documentName = string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json");
+        private readonly string documentPath;
 
         public JsonRepository()
         {
@@ -25,20 +25,33 @@ namespace quickdo_terminal
             options.WriteIndented = true;
 
             directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "qdo", "documents");
-            currentDocumentPath = Path.Combine(directory, currentDocumentName);
+            documentPath = Path.Combine(directory, documentName);
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
-            if (!File.Exists(currentDocumentPath))
-                File.WriteAllText(currentDocumentPath, JsonSerializer.Serialize(Document.Create(), options));
+            if (!File.Exists(documentPath))
+            {
+                var currentDocument = Document.Create();
+                var previousDocument = GetDocument(1);
+                if (previousDocument != null)
+                    previousDocument.Tasks.Where(t => t.Status == QuickDoStatus.PUSH).ToList().ForEach(t => currentDocument.MigrateTask(t));
+                File.WriteAllText(documentPath, JsonSerializer.Serialize(currentDocument, options));
+            }
         }
 
-        public Document GetCurrentDocument()
+        public Document GetDocument(int daysAgo = 0)
         {
-            var document = JsonSerializer.Deserialize<Document>(File.ReadAllText(currentDocumentPath), options);
-            
-            foreach(var task in document.Tasks)
+            if(daysAgo > 0)
+                documentName = string.Concat(DateTime.Now.AddDays(1).Date.ToString("yyyyMMdd"), ".json");
+
+            if (!File.Exists(documentPath))
+                return null;
+
+            var data = File.ReadAllText(documentPath);
+            var document = JsonSerializer.Deserialize<Document>(data, options);
+
+            foreach (var task in document.Tasks)
             {
                 task.Log = document.Log.Where(log => log.TaskId == task.Id).ToList();
             }
@@ -48,7 +61,7 @@ namespace quickdo_terminal
 
         public void UpdateDocument(Document document)
         {
-            File.WriteAllText(currentDocumentPath, JsonSerializer.Serialize(document, options));
+            File.WriteAllText(documentPath, JsonSerializer.Serialize(document, options));
         }
     }
 }

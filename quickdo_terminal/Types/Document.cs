@@ -33,12 +33,25 @@ namespace quickdo_terminal.Types
             var tempRank = Tasks.Count + 1;
             var incompleteTasks = Tasks.Where(task => task.Status == QuickDoStatus.TODO);
             var targetRank = incompleteTasks.Any() ? incompleteTasks.Max(task => task.Rank) + 1 : 1;
-            var task = Task.Create(description, tempRank);
+            var task = Task.Create(description);
 
             Tasks.Add(task);
             MarshalTasks(tempRank, targetRank);
 
             Log.Add(LogEntry.TaskCreated(task));
+        }
+
+        public void MigrateTask(Task task)
+        {
+            var tempRank = Tasks.Count + 1;
+            var incompleteTasks = Tasks.Where(task => task.Status == QuickDoStatus.TODO);
+            var targetRank = incompleteTasks.Any() ? incompleteTasks.Max(task => task.Rank) + 1 : 1;
+
+            task.Status = QuickDoStatus.TODO;
+            Tasks.Add(task);
+            MarshalTasks(tempRank, targetRank);
+
+            Log.Add(LogEntry.TaskPushed(task));
         }
 
         internal void CompleteTask(int rank)
@@ -63,6 +76,18 @@ namespace quickdo_terminal.Types
         public void FocusTask(int rank)
         {
             MarshalTasks(rank, 1);
+            var task = Tasks.SingleOrDefault(task => task.Rank == rank);
+
+            Log.Add(LogEntry.TaskFocused(task));
+        }
+
+        public void Push(int rank)
+        {
+            var task = Tasks.SingleOrDefault(task => task.Rank == rank);
+            task.Status = QuickDoStatus.PUSH;
+            MarshalTasks(rank);
+
+            Log.Add(LogEntry.TaskPushed(task));
         }
 
         private void MarshalTasks(int oldRank, int? newRank = null)
@@ -95,5 +120,6 @@ namespace quickdo_terminal.Types
                 }
             }
         }
+
     }
 }

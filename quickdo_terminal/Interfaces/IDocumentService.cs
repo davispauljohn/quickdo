@@ -12,5 +12,6 @@ namespace quickdo_terminal.Interfaces
         void FocusTask(int rank);
         List<TaskModel> Query(int? rank = null, bool? isReversed = false);
         TaskModel QueryMostRecent(QuickDoLogType? logType);
+        void PushTask(int rank);
     }
 }

@@ -58,6 +58,17 @@ namespace quickdo_terminal.Types
             };
         }
 
+        internal static LogEntry TaskPushed(Task task)
+        {
+            return new LogEntry
+            {
+                Type = QuickDoLogType.TASKPUSHED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
+                TaskId = task.Id,
+                Value = string.Empty
+            };
+        }
+
         public static LogEntry TaskCompleted(Task task)
         {
             return new LogEntry

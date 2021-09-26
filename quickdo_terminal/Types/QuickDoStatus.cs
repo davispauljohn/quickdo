@@ -4,6 +4,7 @@
     {
         TODO,
         DONE,
-        NOPE
+        NOPE,
+        PUSH
     }
 }

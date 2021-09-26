@@ -8,6 +8,7 @@
         TASKCOMPLETED,
         TASKCANCELLED,
         TASKFOCUSED,
+        TASKPUSHED,
         RANKCHANGED
     }
 }

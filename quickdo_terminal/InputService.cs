@@ -28,7 +28,7 @@ namespace quickdo_terminal
             }
 
             string command = args[0];
-            string argument = new string[] { "+", "!" , "x" , "-" }.Contains(command) && args.Length > 1 ? args[1] : null;
+            string argument = new string[] { "+", "!", "x", "-", ">" }.Contains(command) && args.Length > 1 ? args[1] : null;
             List<string> options = command == "?" ? args.Skip(1).Where(a => a.StartsWith("-")).ToList() : new List<string>();
 
             switch (command)
@@ -86,6 +86,20 @@ namespace quickdo_terminal
                     else
                     {
                         var task = documentService.QueryMostRecent(QuickDoLogType.TASKCANCELLED);
+                        if (task != TaskModel.Default())
+                            output.Add(task.ToConsoleLine());
+                    }
+                    break;
+
+                case ">":
+                    if (!string.IsNullOrEmpty(argument))
+                        if (int.TryParse(argument, out int rank))
+                            documentService.PushTask(rank);
+                        else
+                            output.Add(new ConsoleLine("Push command requires an integer argument `> {rank:int}`", ConsoleColor.Red));
+                    else
+                    {
+                        var task = documentService.QueryMostRecent(QuickDoLogType.TASKPUSHED);
                         if (task != TaskModel.Default())
                             output.Add(task.ToConsoleLine());
                     }

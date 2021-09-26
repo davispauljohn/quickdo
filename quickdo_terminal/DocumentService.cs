@@ -19,35 +19,35 @@ namespace quickdo_terminal
 
         public void AddTask(string description)
         {
-            Document document = repository.GetCurrentDocument();
+            Document document = repository.GetDocument();
             document.AddTask(description);
             repository.UpdateDocument(document);
         }
 
         public void FocusTask(int rank)
         {
-            Document document = repository.GetCurrentDocument();
+            Document document = repository.GetDocument();
             document.FocusTask(rank);
             repository.UpdateDocument(document);
         }
 
         public void CompleteTask(int rank)
         {
-            Document document = repository.GetCurrentDocument();
+            Document document = repository.GetDocument();
             document.CompleteTask(rank);
             repository.UpdateDocument(document);
         }
 
         public void CancelTask(int rank)
         {
-            Document document = repository.GetCurrentDocument();
+            Document document = repository.GetDocument();
             document.CancelTask(rank);
             repository.UpdateDocument(document);
         }
 
         public List<TaskModel> Query(int? rank = null, bool? isReversed = false)
         {
-            Document document = repository.GetCurrentDocument();
+            Document document = repository.GetDocument();
             List<Task> tasks = document.Tasks.OrderBy(t => t.Rank).ToList();
 
             if (rank.HasValue)
@@ -64,7 +64,7 @@ namespace quickdo_terminal
 
         public TaskModel QueryMostRecent(QuickDoLogType? logType)
         {
-            Document document = repository.GetCurrentDocument();
+            Document document = repository.GetDocument();
             IEnumerable<Task> tasks = document.Tasks;
             if (tasks == null)
                 return TaskModel.Default();
@@ -79,6 +79,13 @@ namespace quickdo_terminal
                 return TaskModel.FromTask(task);
 
             return TaskModel.Default();
+        }
+
+        public void PushTask(int rank)
+        {
+            Document document = repository.GetDocument();
+            document.Push(rank);
+            repository.UpdateDocument(document);
         }
     }
 }

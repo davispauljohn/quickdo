@@ -4,7 +4,7 @@ namespace quickdo_terminal.Interfaces
 {
     public interface IDocumentRepository
     {
-        Document GetCurrentDocument();
+        Document GetDocument(int daysAgo = 0);
 
         void UpdateDocument(Document document);
     }

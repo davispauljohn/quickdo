@@ -35,17 +35,17 @@ One or more **Log** entries are added per command, containing a **Type** and **T
 ```
 
 ## Commands
-Command                                       |Syntax                             |Options    
-----                                          |----                               |----
-Display and filter tasks                      |?                                  |`default` - Display task list
-Display task created most recently            |+                                  |`? -d0 -s1 -t1 -d` 
-Create task with status TODO                  |+[__description__:_string_]        |
-Display task most recently set to DONE        |x                                  |`? -d0 -s2 -t1 -d`  
-Set the specified task status to DONE         |x[__rank__:_int_]                  |
-Display task most recently set to NOPE        |-                                  |`? -d0 -s3 -t1 -d` 
-Set the specified task to NOPE                |-[__rank__:_int_]                  |   
-Display task at rank 1                        |!                                  |`? -d0 -r1`  
-Move task to rank 1                           |![__rank__:_int_]                  |  
+Command                                       |Syntax                             
+----                                          |----                               
+Display and filter tasks                      |?                                  
+Display task created most recently            |+                                  
+Create task with status TODO                  |+ [__description__:_string_]        
+Display task most recently set to DONE        |x                                  
+Set the specified task status to DONE         |x [__rank__:_int_]                  
+Display task most recently set to NOPE        |-                                   
+Set the specified task to NOPE                |- [__rank__:_int_]                  
+Display task at rank 1                        |!                                  
+Move task to rank 1                           |! [__rank__:_int_]                    
 
 ## Statuses
 **TODO** - The default **Status** of a **Task** representing pending work
@@ -63,9 +63,11 @@ Move task to rank 1                           |![__rank__:_int_]                
 
 **TASKCREATED** - Added when tasks are created
 
-**DESCRIPTIONCHANGED** - Added when a task's description is updated
+**TASKCANCELLED** - Added when tasks are created
 
-**STATUSCHANGED** - Added when a task's status is updated
+**TASKCOMPLETED** - Added when tasks are created
+
+**TASKFOCUSED** - Added when tasks are created
 
 **RANKCHANGED** - Added when a task's rank is updated
 
