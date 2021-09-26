@@ -47,28 +47,38 @@ namespace quickdo_terminal.Types
             };
         }
 
-        public static LogEntry DescriptionChanged(Task task)
+        public static LogEntry TaskCancelled(Task task)
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.DESCRIPTIONCHANGED,
+                Type = QuickDoLogType.TASKCANCELLED,
                 Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = task.Id,
                 Value = task.Description
             };
         }
 
-        public static LogEntry StatusChanged(Task task)
+        public static LogEntry TaskCompleted(Task task)
         {
             return new LogEntry
             {
-                Type = QuickDoLogType.STATUSCHANGED,
+                Type = QuickDoLogType.TASKCOMPLETED,
                 Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
                 TaskId = task.Id,
                 Value = Enum.GetName(task.Status)
             };
         }
 
+        public static LogEntry TaskFocused(Task task)
+        {
+            return new LogEntry
+            {
+                Type = QuickDoLogType.TASKFOCUSED,
+                Timestamp = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now),
+                TaskId = task.Id,
+                Value = task.Rank.ToString()
+            };
+        }
         public static LogEntry RankChanged(Task task)
         {
             return new LogEntry

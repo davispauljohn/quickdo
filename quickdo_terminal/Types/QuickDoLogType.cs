@@ -3,10 +3,11 @@
     public enum QuickDoLogType
     {
         DOCUMENTCREATED,
-        TASKCREATED,
         QUERYEXECUTED,
-        DESCRIPTIONCHANGED,
-        STATUSCHANGED,
+        TASKCREATED,
+        TASKCOMPLETED,
+        TASKCANCELLED,
+        TASKFOCUSED,
         RANKCHANGED
     }
 }

@@ -45,34 +45,40 @@ namespace quickdo_terminal
             repository.UpdateDocument(document);
         }
 
-        public List<TaskModel> Query(int? rank = null)
+        public List<TaskModel> Query(int? rank = null, bool? isReversed = false)
         {
             Document document = repository.GetCurrentDocument();
-            IEnumerable<Task> tasks = document.Tasks;
+            List<Task> tasks = document.Tasks.OrderBy(t => t.Rank).ToList();
 
-            tasks = rank == null ? tasks : tasks.Where(t => t.Rank == rank.Value).ToList();
+            if (rank.HasValue)
+                tasks = tasks.Where(t => t.Rank == rank.Value).ToList();
+
+            if (tasks == null || tasks.Count == 0)
+                return new List<TaskModel> { TaskModel.Default() };
+
+            if (isReversed ?? false)
+                tasks.Reverse();
 
             return tasks.Select(task => TaskModel.FromTask(task)).ToList();
         }
 
-        public TaskModel QueryMostRecent(QuickDoStatus? status = null)
+        public TaskModel QueryMostRecent(QuickDoLogType? logType)
         {
             Document document = repository.GetCurrentDocument();
             IEnumerable<Task> tasks = document.Tasks;
             if (tasks == null)
-                return null;
+                return TaskModel.Default();
 
             var logs = tasks.SelectMany(t => t.Log);
             var taskId = logs.Aggregate((max, curr) =>
                 max.Timestamp.ToInstant() < curr.Timestamp.ToInstant()
-                && tasks.SingleOrDefault(t => t.Id == curr.TaskId)?.Status == status
-                && curr.Type == QuickDoLogType.STATUSCHANGED ? curr : max).TaskId;
+                && curr.Type == logType ? curr : max).TaskId;
             var task = tasks?.SingleOrDefault(t => t.Id == taskId);
 
             if (task != null)
                 return TaskModel.FromTask(task);
 
-            return null;
+            return TaskModel.Default();
         }
     }
 }

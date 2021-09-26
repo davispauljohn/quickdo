@@ -2,9 +2,11 @@
 using NUnit.Framework;
 using quickdo_terminal;
 using quickdo_terminal.Interfaces;
+using quickdo_terminal.Models;
 using quickdo_terminal.Types;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 
 namespace quickdo_tests
 {
@@ -18,6 +20,8 @@ namespace quickdo_tests
         public void Setup()
         {
             documentService = Substitute.For<IDocumentService>();
+            documentService.Query(Arg.Any<int?>()).Returns(new List<TaskModel> { TaskModel.Default() });
+            documentService.QueryMostRecent(Arg.Any<QuickDoLogType>()).Returns(TaskModel.Default());
             inputService = new InputService(documentService);
         }
 
@@ -29,6 +33,16 @@ namespace quickdo_tests
             documentService.Received(0);
             result.ShouldHaveSingleItem();
             result[0].Text.ShouldBe("TODO: Impluhment halp");
+        }
+
+        [Test]
+        public void WhenInputIsUnrecognised_ShouldDisplayError()
+        {
+            var result = inputService.ParseAndRunInput(new[] { "+!x-" });
+
+            documentService.Received(0);
+            result.ShouldHaveSingleItem();
+            result[0].Text.ShouldBe("Command not recognised");
         }
 
         [TestCase("-h")]
@@ -55,7 +69,7 @@ namespace quickdo_tests
         {
             inputService.ParseAndRunInput(new[] { "+" });
 
-            documentService.Received(1).QueryMostRecent(QuickDoStatus.TODO);
+            documentService.Received(1).QueryMostRecent(QuickDoLogType.TASKCREATED);
         }
 
         [Test]
@@ -67,11 +81,11 @@ namespace quickdo_tests
         }
 
         [Test]
-        public void WhenInputIsCompleteSymbol_AndArgumentIsNullOrEmpty__ShouldCallQueryMostRecentWithStatusDONE()
+        public void WhenInputIsCompleteSymbol_AndArgumentIsNullOrEmpty_ShouldCallQueryMostRecentWithStatusDONE()
         {
             inputService.ParseAndRunInput(new[] { "x" });
 
-            documentService.Received(1).QueryMostRecent(QuickDoStatus.DONE);
+            documentService.Received(1).QueryMostRecent(QuickDoLogType.TASKCOMPLETED);
         }
 
         [Test]
@@ -80,7 +94,7 @@ namespace quickdo_tests
             var result = inputService.ParseAndRunInput(new[] { "x", "I should be an integer" });
 
             result.ShouldHaveSingleItem();
-            result[0].Text.ShouldBe("Error: Only integer arguments are accepted when completing a task `x {rank:int}`");
+            result[0].Text.ShouldBe("Complete command requires an integer argument `x {rank:int}`");
             result[0].Colour.ShouldBe(ConsoleColor.Red);
         }
 
@@ -97,7 +111,7 @@ namespace quickdo_tests
         {
             inputService.ParseAndRunInput(new[] { "-" });
 
-            documentService.Received(1).QueryMostRecent(QuickDoStatus.NOPE);
+            documentService.Received(1).QueryMostRecent(QuickDoLogType.TASKCANCELLED);
         }
 
         [Test]
@@ -106,7 +120,7 @@ namespace quickdo_tests
             var result = inputService.ParseAndRunInput(new[] { "-", "I should be an integer" });
 
             result.ShouldHaveSingleItem();
-            result[0].Text.ShouldBe("Error: Only integer arguments are accepted when cancelling a task `- {rank:int}`");
+            result[0].Text.ShouldBe("Cancel command requires an integer argument `- {rank:int}`");
             result[0].Colour.ShouldBe(ConsoleColor.Red);
         }
 
@@ -132,7 +146,7 @@ namespace quickdo_tests
             var result = inputService.ParseAndRunInput(new[] { "!", "I should be an integer" });
 
             result.ShouldHaveSingleItem();
-            result[0].Text.ShouldBe("Error: Only integer arguments are accepted when focusing a task `! {rank:int}`");
+            result[0].Text.ShouldBe("Focus command requires an integer argument `! {rank:int}`");
             result[0].Colour.ShouldBe(ConsoleColor.Red);
         }
 

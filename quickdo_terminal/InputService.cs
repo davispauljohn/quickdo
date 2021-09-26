@@ -1,5 +1,6 @@
 ﻿using quickdo_terminal.Extensions;
 using quickdo_terminal.Interfaces;
+using quickdo_terminal.Models;
 using quickdo_terminal.Types;
 using System;
 using System.Collections.Generic;
@@ -27,13 +28,14 @@ namespace quickdo_terminal
             }
 
             string command = args[0];
-            string argument = args.Length > 1 ? args[1] : null;
-
+            string argument = new string[] { "+", "!" , "x" , "-" }.Contains(command) && args.Length > 1 ? args[1] : null;
+            List<string> options = command == "?" ? args.Skip(1).Where(a => a.StartsWith("-")).ToList() : new List<string>();
 
             switch (command)
             {
                 case "?":
-                    output = documentService.Query().ToConsole();
+                    var isReversed = options.Contains("-r") || options.Contains("--reverse");
+                    output = documentService.Query(isReversed: isReversed).ToConsole();
                     break;
 
                 case "!":
@@ -41,12 +43,12 @@ namespace quickdo_terminal
                         if (int.TryParse(argument, out int rank))
                             documentService.FocusTask(rank);
                         else
-                            output.Add(new ConsoleLine("Error: Only integer arguments are accepted when focusing a task `! {rank:int}`", ConsoleColor.Red));
+                            output.Add(new ConsoleLine("Focus command requires an integer argument `! {rank:int}`", ConsoleColor.Red));
                     else
                     {
                         var task = documentService.Query(rank: 1)?.SingleOrDefault();
-                        if (task != null)
-                            output.Add(task.ToConsole());
+                        if (task != TaskModel.Default())
+                            output.Add(task.ToConsoleLine());
                     }
                     break;
 
@@ -55,9 +57,9 @@ namespace quickdo_terminal
                         documentService.AddTask(argument);
                     else
                     {
-                        var task = documentService.QueryMostRecent(QuickDoStatus.TODO);
-                        if (task != null)
-                            output.Add(task.ToConsole());
+                        var task = documentService.QueryMostRecent(QuickDoLogType.TASKCREATED);
+                        if (task != TaskModel.Default())
+                            output.Add(task.ToConsoleLine());
                     }
                     break;
 
@@ -66,12 +68,12 @@ namespace quickdo_terminal
                         if (int.TryParse(argument, out int rank))
                             documentService.CompleteTask(rank);
                         else
-                            output.Add(new ConsoleLine("Error: Only integer arguments are accepted when completing a task `x {rank:int}`", ConsoleColor.Red));
+                            output.Add(new ConsoleLine("Complete command requires an integer argument `x {rank:int}`", ConsoleColor.Red));
                     else
                     {
-                        var task = documentService.QueryMostRecent(QuickDoStatus.DONE);
-                        if (task != null)
-                            output.Add(task.ToConsole());
+                        var task = documentService.QueryMostRecent(QuickDoLogType.TASKCOMPLETED);
+                        if (task != TaskModel.Default())
+                            output.Add(task.ToConsoleLine());
                     }
                     break;
 
@@ -80,19 +82,20 @@ namespace quickdo_terminal
                         if (int.TryParse(argument, out int rank))
                             documentService.CancelTask(rank);
                         else
-                            output.Add(new ConsoleLine("Error: Only integer arguments are accepted when cancelling a task `- {rank:int}`", ConsoleColor.Red));
+                            output.Add(new ConsoleLine("Cancel command requires an integer argument `- {rank:int}`", ConsoleColor.Red));
                     else
                     {
-                        var task = documentService.QueryMostRecent(QuickDoStatus.NOPE);
-                        if (task != null)
-                            output.Add(task.ToConsole());
+                        var task = documentService.QueryMostRecent(QuickDoLogType.TASKCANCELLED);
+                        if (task != TaskModel.Default())
+                            output.Add(task.ToConsoleLine());
                     }
                     break;
 
                 default:
-                    output.Add(new ConsoleLine("Error: Command not recognised. qdo --help", ConsoleColor.Red));
+                    output.Add(new ConsoleLine("Command not recognised", ConsoleColor.Red));
                     break;
             }
+
             return output;
         }
     }

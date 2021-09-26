@@ -29,5 +29,10 @@ namespace quickdo_terminal.Models
                 Log = task.Log.Select(l => LogModel.FromLogEntry(l)).ToList()
             };
         }
+
+        public static TaskModel Default()
+        {
+            return new TaskModel();
+        }
     }
 }

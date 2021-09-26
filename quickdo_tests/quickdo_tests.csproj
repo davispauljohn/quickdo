@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="quickdo_terminal\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\quickdo_terminal\quickdo_terminal.csproj" />
   </ItemGroup>
 

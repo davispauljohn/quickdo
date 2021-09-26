@@ -48,7 +48,7 @@ namespace quickdo_terminal.Types
             task.Status = QuickDoStatus.DONE;
             MarshalTasks(rank);
 
-            Log.Add(LogEntry.StatusChanged(task));
+            Log.Add(LogEntry.TaskCompleted(task));
         }
 
         internal void CancelTask(int rank)
@@ -57,7 +57,7 @@ namespace quickdo_terminal.Types
             task.Status = QuickDoStatus.NOPE;
             MarshalTasks(rank);
 
-            Log.Add(LogEntry.StatusChanged(task));
+            Log.Add(LogEntry.TaskCancelled(task));
         }
 
         public void FocusTask(int rank)

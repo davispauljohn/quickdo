@@ -8,7 +8,7 @@ namespace quickdo_terminal.Extensions
 {
     public static class TaskModelExtensions
     {
-        public static ConsoleLine ToConsole(this TaskModel task)
+        public static ConsoleLine ToConsoleLine(this TaskModel task)
         {
             return new ConsoleLine($"{task.Rank}\t{task.Status}\t{task.Description}", task.Colour);
         }
@@ -18,7 +18,7 @@ namespace quickdo_terminal.Extensions
             if (tasks == null || tasks.Count == 0)
                 return new List<ConsoleLine>();
 
-            return tasks.Select(t => t.ToConsole()).ToList();
+            return tasks.Select(t => t.ToConsoleLine()).ToList();
         }
 
     }

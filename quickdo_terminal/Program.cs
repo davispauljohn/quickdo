@@ -23,6 +23,7 @@ namespace quickdo_terminal
                 {
                     Console.ForegroundColor = o.Colour;
                     Console.WriteLine(o.Text);
+                    Console.ResetColor();
                 });
         }
     }
