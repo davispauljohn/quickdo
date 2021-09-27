@@ -12,10 +12,9 @@ namespace quickdo_terminal
 {
     internal class JsonRepository : IDocumentRepository
     {
+        private const int daysInWeek = 7;
         private JsonSerializerOptions options = new();
         private readonly string directory;
-        private string documentName = string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json");
-        private readonly string documentPath;
 
         public JsonRepository()
         {
@@ -25,7 +24,7 @@ namespace quickdo_terminal
             options.WriteIndented = true;
 
             directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "qdo", "documents");
-            documentPath = Path.Combine(directory, documentName);
+            var documentPath = Path.Combine(directory, string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json"));
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
@@ -33,7 +32,7 @@ namespace quickdo_terminal
             if (!File.Exists(documentPath))
             {
                 var currentDocument = Document.Create();
-                var previousDocument = GetDocument(1);
+                var previousDocument = GetPreviousDocument();
                 if (previousDocument != null)
                     previousDocument.Tasks.Where(t => t.Status == QuickDoStatus.PUSH).ToList().ForEach(t => currentDocument.MigrateTask(t));
                 File.WriteAllText(documentPath, JsonSerializer.Serialize(currentDocument, options));
@@ -42,9 +41,8 @@ namespace quickdo_terminal
 
         public Document GetDocument(int daysAgo = 0)
         {
-            if(daysAgo > 0)
-                documentName = string.Concat(DateTime.Now.AddDays(1).Date.ToString("yyyyMMdd"), ".json");
-
+            string documentPath = Path.Combine(directory, string.Concat(DateTime.Now.AddDays(-daysAgo).Date.ToString("yyyyMMdd"), ".json")); ;
+            
             if (!File.Exists(documentPath))
                 return null;
 
@@ -59,8 +57,37 @@ namespace quickdo_terminal
             return document;
         }
 
+        public Document GetPreviousDocument()
+        {
+            string documentPath = null;
+            int daysAgo = 1;
+            while (documentPath == null)
+            {
+                documentPath = Path.Combine(directory, string.Concat(DateTime.Now.AddDays(-daysAgo).Date.ToString("yyyyMMdd"), ".json"));
+                if (!File.Exists(documentPath))
+                {
+                    documentPath = null;
+                    daysAgo++;
+                }
+
+                if (daysAgo == 8)
+                    return null;
+            }
+
+            var data = File.ReadAllText(documentPath);
+            var document = JsonSerializer.Deserialize<Document>(data, options);
+
+            foreach (var task in document.Tasks)
+            {
+                task.Log = document.Log.Where(log => log.TaskId == task.Id).ToList();
+            }
+
+            return document;
+        }
+
         public void UpdateDocument(Document document)
         {
+            var documentPath = Path.Combine(directory, string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json"));
             File.WriteAllText(documentPath, JsonSerializer.Serialize(document, options));
         }
     }

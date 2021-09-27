@@ -20,6 +20,7 @@ namespace quickdo_terminal
         public List<ConsoleLine> ParseAndRunInput(string[] args)
         {
             List<ConsoleLine> output = new();
+            Console.WriteLine(Environment.CurrentDirectory);
 
             if (args.Length == 0 || args.Contains("-h") || args.Contains("--help"))
             {
