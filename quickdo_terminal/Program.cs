@@ -18,13 +18,16 @@ namespace quickdo_terminal
 
             var inputService = serviceProvider.GetService<IInputService>();
 
-            inputService.ParseAndRunInput(args)
-                .ForEach(o =>
-                {
-                    Console.ForegroundColor = o.Colour;
-                    Console.WriteLine(o.Text);
-                    Console.ResetColor();
-                });
+            var output = inputService.ParseAndRunInput(args);
+            if (output.Count == 0) 
+                return;
+
+            output.ForEach(o =>
+            {
+                Console.ForegroundColor = o.Colour;
+                Console.WriteLine(o.Text);
+                Console.ResetColor();
+            });
         }
     }
 }

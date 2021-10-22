@@ -1,6 +1,4 @@
 ﻿using quickdo_terminal.Models;
-using quickdo_terminal.Types;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,6 +18,5 @@ namespace quickdo_terminal.Extensions
 
             return tasks.Select(t => t.ToConsoleLine()).ToList();
         }
-
     }
 }

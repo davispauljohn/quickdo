@@ -11,7 +11,7 @@
           <_Parameter1>quickdo_tests</_Parameter1>
       </AssemblyAttribute>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-    <PackageReference Include="NodaTime" Version="3.0.5" />
+    <PackageReference Include="NodaTime" Version="3.0.6" />
     <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace quickdo_terminal.Types
 {
-    public class Task
+    public class Task : IRankable
     {
         public Guid Id { get; set; }
         public QuickDoStatus Status { get; set; }

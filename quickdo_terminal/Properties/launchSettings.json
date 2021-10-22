@@ -2,7 +2,7 @@
   "profiles": {
     "quickdo_terminal": {
       "commandName": "Project",
-      "commandLineArgs": "?"
+      "commandLineArgs": "? 3"
     }
   }
 }

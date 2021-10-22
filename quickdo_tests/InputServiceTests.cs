@@ -83,7 +83,7 @@ namespace quickdo_tests
         [Test]
         public void WhenInputIsCompleteSymbol_AndArgumentIsNullOrEmpty_ShouldCallQueryMostRecentWithStatusDONE()
         {
-            inputService.ParseAndRunInput(new[] { "x" });
+            inputService.ParseAndRunInput(new[] { "-" });
 
             documentService.Received(1).QueryMostRecent(QuickDoLogType.TASKCOMPLETED);
         }
@@ -91,17 +91,17 @@ namespace quickdo_tests
         [Test]
         public void WhenInputIsCompleteSymbol_AndArgumentIsNotEmpty_AndArgumentIsNotInteger_ShouldCallCompleteTask()
         {
-            var result = inputService.ParseAndRunInput(new[] { "x", "I should be an integer" });
+            var result = inputService.ParseAndRunInput(new[] { "-", "I should be an integer" });
 
             result.ShouldHaveSingleItem();
-            result[0].Text.ShouldBe("Complete command requires an integer argument `x {rank:int}`");
+            result[0].Text.ShouldBe("Complete command requires an integer argument `- {rank:int}`");
             result[0].Colour.ShouldBe(ConsoleColor.Red);
         }
 
         [Test]
         public void WhenInputIsCompleteSymbol_AndArgumentIsNotEmpty_AndArgumentIsInteger_ShouldCallCompleteTask()
         {
-            inputService.ParseAndRunInput(new[] { "x", "1" });
+            inputService.ParseAndRunInput(new[] { "-", "1" });
 
             documentService.Received(1).CompleteTask(1);
         }
@@ -109,7 +109,7 @@ namespace quickdo_tests
         [Test]
         public void WhenInputIsCancelSymbol_AndArgumentIsNullOrEmpty__ShouldCallQueryMostRecentWithStatusNOPE()
         {
-            inputService.ParseAndRunInput(new[] { "-" });
+            inputService.ParseAndRunInput(new[] { "x" });
 
             documentService.Received(1).QueryMostRecent(QuickDoLogType.TASKCANCELLED);
         }
@@ -117,17 +117,17 @@ namespace quickdo_tests
         [Test]
         public void WhenInputIsCancelSymbol_AndArgumentIsNotEmpty_AndArgumentIsNotInteger_ShouldCallCancelTask()
         {
-            var result = inputService.ParseAndRunInput(new[] { "-", "I should be an integer" });
+            var result = inputService.ParseAndRunInput(new[] { "x", "I should be an integer" });
 
             result.ShouldHaveSingleItem();
-            result[0].Text.ShouldBe("Cancel command requires an integer argument `- {rank:int}`");
+            result[0].Text.ShouldBe("Cancel command requires an integer argument `x {rank:int}`");
             result[0].Colour.ShouldBe(ConsoleColor.Red);
         }
 
         [Test]
         public void WhenInputIsCancelSymbol_AndArgumentIsNotEmpty_AndArgumentIsInteger_ShouldCallCancelTask()
         {
-            inputService.ParseAndRunInput(new[] { "-", "1" });
+            inputService.ParseAndRunInput(new[] { "x", "1" });
 
             documentService.Received(1).CancelTask(1);
         }
@@ -161,7 +161,7 @@ namespace quickdo_tests
         [Test]
         public void WhenInputIsPushSymbol_AndArgumentIsNullOrEmpty__ShouldCallQueryWithRankOne()
         {
-            inputService.ParseAndRunInput(new[] { ">" });
+            inputService.ParseAndRunInput(new[] { "~" });
 
             documentService.Received(1).QueryMostRecent(QuickDoLogType.TASKPUSHED);
         }
@@ -169,17 +169,17 @@ namespace quickdo_tests
         [Test]
         public void WhenInputIsPushSymbol_AndArgumentIsNotEmpty_AndArgumentIsNotInteger_ShouldReturnArgumentError()
         {
-            var result = inputService.ParseAndRunInput(new[] { ">", "I should be an integer" });
+            var result = inputService.ParseAndRunInput(new[] { "~", "I should be an integer" });
 
             result.ShouldHaveSingleItem();
-            result[0].Text.ShouldBe("Push command requires an integer argument `> {rank:int}`");
+            result[0].Text.ShouldBe("Push command requires an integer argument `~ {rank:int}`");
             result[0].Colour.ShouldBe(ConsoleColor.Red);
         }
 
         [Test]
         public void WhenInputIsPushSymbol_AndArgumentIsNotEmpty_AndArgumentIsInteger_ShouldCallPushTask()
         {
-            inputService.ParseAndRunInput(new[] { ">", "2" });
+            inputService.ParseAndRunInput(new[] { "~", "2" });
 
             documentService.Received(1).PushTask(2);
         }

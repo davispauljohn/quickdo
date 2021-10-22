@@ -41,46 +41,34 @@ namespace quickdo_terminal
 
         public Document GetDocument(int daysAgo = 0)
         {
-            string documentPath = Path.Combine(directory, string.Concat(DateTime.Now.AddDays(-daysAgo).Date.ToString("yyyyMMdd"), ".json")); ;
+            string fileName = string.Concat(DateTime.Now.AddDays(-daysAgo).Date.ToString("yyyyMMdd"), ".json");
+            string documentPath = Path.Combine(directory, fileName);
             
             if (!File.Exists(documentPath))
                 return null;
 
-            var data = File.ReadAllText(documentPath);
-            var document = JsonSerializer.Deserialize<Document>(data, options);
-
-            foreach (var task in document.Tasks)
-            {
-                task.Log = document.Log.Where(log => log.TaskId == task.Id).ToList();
-            }
+            Document document = DeserialiseDocument(documentPath);
 
             return document;
         }
 
         public Document GetPreviousDocument()
         {
-            string documentPath = null;
             int daysAgo = 1;
+            string fileName = string.Concat(DateTime.Now.AddDays(-daysAgo).Date.ToString("yyyyMMdd"), ".json");
+            string documentPath = null;
+
             while (documentPath == null)
             {
-                documentPath = Path.Combine(directory, string.Concat(DateTime.Now.AddDays(-daysAgo).Date.ToString("yyyyMMdd"), ".json"));
-                if (!File.Exists(documentPath))
-                {
-                    documentPath = null;
+                var path = Path.Combine(directory, fileName);
+                if (!File.Exists(path))
                     daysAgo++;
-                }
 
                 if (daysAgo == 8)
                     return null;
             }
 
-            var data = File.ReadAllText(documentPath);
-            var document = JsonSerializer.Deserialize<Document>(data, options);
-
-            foreach (var task in document.Tasks)
-            {
-                task.Log = document.Log.Where(log => log.TaskId == task.Id).ToList();
-            }
+            Document document = DeserialiseDocument(documentPath);
 
             return document;
         }
@@ -89,6 +77,19 @@ namespace quickdo_terminal
         {
             var documentPath = Path.Combine(directory, string.Concat(DateTime.Now.Date.ToString("yyyyMMdd"), ".json"));
             File.WriteAllText(documentPath, JsonSerializer.Serialize(document, options));
+        }
+
+        private Document DeserialiseDocument(string documentPath)
+        {
+            var data = File.ReadAllText(documentPath);
+            var document = JsonSerializer.Deserialize<Document>(data, options);
+
+            foreach (var task in document.Tasks)
+            {
+                task.Log = document.Log.Where(log => log.TaskId == task.Id).ToList();
+            }
+
+            return document;
         }
     }
 }

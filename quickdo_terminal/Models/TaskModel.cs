@@ -25,7 +25,13 @@ namespace quickdo_terminal.Models
                 Rank = task.Rank,
                 Status = Enum.GetName(task.Status),
                 Description = task.Description,
-                Colour = task.Status == QuickDoStatus.NOPE ? ConsoleColor.Red : task.Status == QuickDoStatus.DONE ? ConsoleColor.Green : ConsoleColor.White,
+                Colour = task.Status == QuickDoStatus.NOPE
+                    ? ConsoleColor.Red
+                    : task.Status == QuickDoStatus.DONE
+                        ? ConsoleColor.Green
+                        : task.Status == QuickDoStatus.PUSH
+                            ? ConsoleColor.Blue
+                            : ConsoleColor.White,
                 Log = task.Log.Select(l => LogModel.FromLogEntry(l)).ToList()
             };
         }
