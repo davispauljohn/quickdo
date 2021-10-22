@@ -40,10 +40,10 @@ Command                                       |Syntax
 Display and filter tasks                      |?                                  
 Display task created most recently            |+                                  
 Create task with status TODO                  |+ [__description__:_string_]        
-Display task most recently set to DONE        |x                                  
-Set the specified task status to DONE         |x [__rank__:_int_]                  
-Display task most recently set to NOPE        |-                                   
-Set the specified task to NOPE                |- [__rank__:_int_]                  
+Display task most recently set to DONE        |-                                  
+Set the specified task status to DONE         |- [__rank__:_int_]                  
+Display task most recently set to NOPE        |x                                   
+Set the specified task to NOPE                |x [__rank__:_int_]                  
 Display task at rank 1                        |!                                  
 Move task to rank 1                           |! [__rank__:_int_]                    
 
@@ -59,15 +59,17 @@ Move task to rank 1                           |! [__rank__:_int_]
 ## Log Types
 **DOCUMENTCREATED** - Added during the creation of the document. The first entry in all documents.
 
-**QUERYEXECUTED** - Added when tasks are fetched from storage
+**QUERYEXECUTED** - Added when tasks are fetched
 
 **TASKCREATED** - Added when tasks are created
 
-**TASKCANCELLED** - Added when tasks are created
+**TASKCANCELLED** - Added when tasks are cancelled
 
-**TASKCOMPLETED** - Added when tasks are created
+**TASKCOMPLETED** - Added when tasks are completed
 
-**TASKFOCUSED** - Added when tasks are created
+**TASKFOCUSED** - Added when tasks are focused
+
+**TASKPUSHED** - Added when a task's rank is pushed
 
 **RANKCHANGED** - Added when a task's rank is updated
 
