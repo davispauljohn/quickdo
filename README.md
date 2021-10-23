@@ -45,14 +45,15 @@ Set the specified task status to DONE         |- [__rank__:_int_]
 Display task most recently set to NOPE        |x                                   
 Set the specified task to NOPE                |x [__rank__:_int_]                  
 Display task at rank 1                        |!                                  
-Move task to rank 1                           |! [__rank__:_int_]                    
+Move task to rank 1                           |! [__rank__:_int_]                       
+Mark the specified task to be migrated        |~ [__rank__:_int_]                    
 
 ## Statuses
 **TODO** - The default **Status** of a **Task** representing pending work
 
 **DONE** - Positive conclusion
 
-**PUSH** - Deferred and migrated to the next **Document** when it is created
+**PUSH** - Inconclusive and migrated to the next **Document** when it is created
 
 **NOPE** - Negative conclusion
 
