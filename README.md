@@ -2,7 +2,7 @@
 
 A simple task list and activity log for your terminal. 
 
-**Documents** are JSON files for storing Tasks and Logs. One Document is created automatically for each day of use.
+**Documents** are JSON files containing Tasks and Logs. One Document is created automatically for each day of use.
 ```
 //Document
 {
@@ -12,7 +12,7 @@ A simple task list and activity log for your terminal.
 }
 ```
 
-**Tasks** are text descriptions in an ordered list with a gloablly unique **Id**, **Rank** and **Status**  
+**Tasks** are text descriptions in an ordered list with a unique **Id**, **Rank** and **Status**  
 ```
 //Task
 {

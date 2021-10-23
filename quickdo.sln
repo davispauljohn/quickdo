@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quickdo_terminal", "quickdo_terminal\quickdo_terminal.csproj", "{92DB6E48-97DB-471C-BB42-27BB59AA015F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quickdo_tests", "quickdo_tests\quickdo_tests.csproj", "{79D75249-E7C3-47D8-9A03-6D6203E172FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quickdo_tests", "quickdo_tests\quickdo_tests.csproj", "{79D75249-E7C3-47D8-9A03-6D6203E172FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{E9AC9AB3-7358-408E-914A-2ECBE07EF715}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
